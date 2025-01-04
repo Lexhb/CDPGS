@@ -37,3 +37,8 @@ rivadavia <- st_read('https://bitsandbricks.github.io/data/avenida_rivadavia.geo
 
 ggplot(comunas) + geom_sf(aes(fill=comunas)) + geom_sf(data = rivadavia,
                                                        color ="red")
+
+nueva_columna <- c("Sur", "Norte", "Sur", "Sur", "Sur", "Norte", "Sur", 
+                   "Sur", "Sur", "Norte", "Norte", "Norte", "Norte", "Norte", "Norte")
+
+nueva_columna
