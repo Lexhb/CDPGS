@@ -1,0 +1,48 @@
+mortalidad <- read.csv('https://bitsandbricks.github.io/data/mortalidad_infantil_caba_2016.csv')
+
+mortalidad
+
+dim(mortalidad)
+
+head(mortalidad)
+
+names(mortalidad)
+
+install.packages("tidyverse")
+
+library(tidyverse)
+
+ggplot(mortalidad) +
+  geom_col(aes(x = factor(Comuna), y = Tasa2016))
+
+install.packages("sf")
+
+library(sf)
+
+comunas <- st_read('https://bitsandbricks.github.io/data/CABA_comunas.geojson')
+
+head(comunas)
+
+names(comunas)
+
+dim(comunas)
+
+ggplot(comunas) +
+  geom_sf()
+
+ggplot(comunas) +
+  geom_sf(aes(fill = comunas))
+
+rivadavia <- st_read('https://bitsandbricks.github.io/data/avenida_rivadavia.geojson')
+
+ggplot(comunas) + geom_sf(aes(fill=comunas)) + geom_sf(data = rivadavia,
+                                                       color ="red")
+
+nueva_columna <- c("Sur", "Norte", "Sur", "Sur", "Sur", "Norte", "Sur", 
+                   "Sur", "Sur", "Norte", "Norte", "Norte", "Norte", "Norte", "Norte")
+
+nueva_columna
+
+comunas <- mutate(comunas, ubicacion = nueva_columna)
+
+head(comunas)
