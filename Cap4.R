@@ -45,6 +45,10 @@ ggplot(contactos_por_comuna) +
 
 summary(atencion_ciudadano)
 
+str(atencion_ciudadano)
+
+levels(atencion_ciudadano$TIPO_PRESTACION)
+
 contactos_por_comuna_y_tipo <- atencion_ciudadano %>%
   group_by(COMUNA, TIPO_PRESTACION) %>%
   summarise(miles_contactos = sum(total) / 1000 ) %>%
@@ -55,3 +59,63 @@ head(contactos_por_comuna_y_tipo)
 ggplot(contactos_por_comuna_y_tipo) + 
   geom_point(aes(x = POBLACION, y= miles_contactos)) +
   facet_wrap(~TIPO_PRESTACION)
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = BARRIO, weight = total))
+
+options(scipen = 999)
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = BARRIO, weight = total)) +
+  coord_flip()
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = BARRIO, weight = total, fill = TIPO_PRESTACION)) +
+  coord_flip()
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = BARRIO, weight = total, color = TIPO_PRESTACION)) +
+  coord_flip()
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = TIPO_PRESTACION, weight = total))
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = TIPO_PRESTACION, weight = total, fill = BARRIO))
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = TIPO_PRESTACION, weight = total)) +
+  facet_wrap(~BARRIO)
+
+contactos_por_mes <- atencion_ciudadano %>%
+  group_by(PERIODO) %>%
+  summarise(gran_total = sum(total))
+
+head(contactos_por_mes)
+
+ggplot(contactos_por_mes) +
+  geom_histogram(aes(x = gran_total))
+
+contactos_por_mes_y_tipo <- atencion_ciudadano %>%
+  group_by(PERIODO, TIPO_PRESTACION) %>%
+  summarise(gran_total = sum(total))
+
+head(contactos_por_mes_y_tipo)
+
+ggplot(contactos_por_mes_y_tipo) +
+  geom_histogram(aes(x = gran_total)) +
+  facet_wrap(~TIPO_PRESTACION)
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = BARRIO, weight = total, fill = TIPO_PRESTACION)) +
+  coord_flip()
+
+ggplot(atencion_ciudadano) +
+  geom_bar(aes(x = BARRIO, weight = total, fill = TIPO_PRESTACION)) +
+  coord_flip() +
+  labs(title = "Contactos realizados al Sistema Único de Atención Ciudadana",
+       subtitle = "Ciudad Autónoma de Buenos Aires, 2013 - 2015",
+       caption = "Fuente: portal de datos abiertos de la Ciudad - http://data.buenosaires.gob.ar",
+       x = "barrio",
+       y = "cantidad",
+       fill = "Motivo del contacto")
