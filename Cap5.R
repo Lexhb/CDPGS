@@ -78,3 +78,77 @@ ggplot(data_arg) +
   labs(title = "Evolución del PBI en la Argentina",
        y = "PBI per cápita",
        caption = "La línea roja indica la ocurrencia de la crisis del 2001")
+
+data_mundial_2007 <- data_mundial %>% filter(anio == 2007)
+
+head(data_mundial_2007)
+
+rename(data_mundial_2007, año = anio)
+
+data_mundial_2007 <- data_mundial %>% filter(anio == 2007)
+
+ggplot(data = data_mundial_2007) +
+  geom_point(aes(x = continente, y = expVida, color = continente)) +
+  labs(title = "Expectativa de vida por continente",
+       y = "expectativa de vida")
+
+ggplot(data = data_mundial_2007) +
+  geom_jitter(aes(x = continente, y = expVida, color = continente)) +
+  labs(title = "Expectativa de vida por continente",
+       y = "expectativa de vida")
+
+ggplot(data = data_mundial_2007) +
+  geom_histogram(aes(x = expVida, fill = continente)) +
+  facet_wrap(~continente) +
+  labs(title = "Expectativa de vida por continente",
+       subtitle = "histogramas",
+       x = "expectativa de vida",
+       y = "cantidad")
+
+modelo_exp_continente <- lm(expVida ~ continente, data = data_mundial_2007)
+
+modelo_exp_continente
+
+data_mundial_2007 <- data_mundial_2007 %>%
+  mutate(residuo_ml = residuals(modelo_exp_continente))
+
+ggplot(data_mundial_2007) +
+  geom_jitter(aes(x = continente, y = residuo_ml), width = 0.1) +
+  geom_hline(yintercept = 0, col = "blue") +
+  labs(x = "año", y = "residuo del modelo lineal")
+
+data_mundial_2007 %>%
+  filter(continente == "Asia") %>%
+  arrange(expVida) %>%
+  head()
+
+data_afganistan <- data_mundial %>% filter(pais == "Afghanistan")
+
+ggplot(data_afganistan) +
+  geom_line(aes(x = anio, y = expVida)) +
+  labs(title = "Expectativa de vida en Afganistán",
+       y = "expectativa de vida")
+
+##Regresion Múltiple
+
+modelo_exp_multiple <- lm(expVida ~ pobl + PBI_PC, data = data_mundial_2007)
+
+modelo_exp_multiple
+
+data_mundial_2007 %>%
+  arrange(desc(expVida)) %>%
+  head(n = 10)
+
+data_mundial_2007 %>%
+  arrange(desc(pobl)) %>%
+  head(n = 10)
+
+cor(data_mundial_2007$expVida, data_mundial_2007$pobl)
+
+options(scipen = 999)
+
+summary(modelo_exp_multiple)
+
+modelo_exp_multiple <- lm(expVida ~ pobl + PBI_PC + continente, data = data_mundial_2007)
+
+summary(modelo_exp_multiple)
